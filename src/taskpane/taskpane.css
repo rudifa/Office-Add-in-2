@@ -18,8 +18,6 @@
  
  .ms-welcome__header {
     padding: 20px;
-    padding-bottom: 30px;
-    padding-top: 100px;
     display: -webkit-flex;
     display: flex;
     -webkit-flex-direction: column;
@@ -65,8 +63,8 @@
      margin-top: 30px;
  }
  
-.ms-Button.ms-Button--hero .ms-Button-label {
-  color: #0078d7;
+.ms-Button .ms-Button-label {
+  color: #d70019;
 }
 
 .ms-Button.ms-Button--hero:hover .ms-Button-label,

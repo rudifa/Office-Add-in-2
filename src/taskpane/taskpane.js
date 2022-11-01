@@ -5,7 +5,7 @@
 
 /* global document, Office, Word */
 
-import { base64Image } from "../../base64Image";  // Module not found: Error: Can't resolve '../../base64Image'
+import { base64Image } from "../../base64Image";
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Word) {
@@ -52,7 +52,6 @@ async function applyStyle() {
   await Word.run(async (context) => {
     const firstParagraph = context.document.body.paragraphs.getFirst();
     firstParagraph.styleBuiltIn = Word.Style.intenseReference;
-
     await context.sync();
   }).catch(function (error) {
     console.log("Error: " + error);
@@ -66,7 +65,6 @@ async function applyCustomStyle() {
   await Word.run(async (context) => {
     const lastParagraph = context.document.body.paragraphs.getLast();
     lastParagraph.style = "MyCustomStyle";
-
     await context.sync();
   }).catch(function (error) {
     console.log("Error: " + error);
@@ -98,14 +96,9 @@ async function insertTextIntoRange() {
     const doc = context.document;
     const originalRange = doc.getSelection();
     originalRange.insertText(" (C2R)", "End");
-
-    // Load the text of the range and sync so that the
-    //        current range text can be read.
     originalRange.load("text");
     await context.sync();
-
     doc.body.insertParagraph("Original range: " + originalRange.text, "End");
-
     await context.sync();
   }).catch(function (error) {
     console.log("Error: " + error);
@@ -117,23 +110,12 @@ async function insertTextIntoRange() {
 
 async function insertTextBeforeRange() {
   await Word.run(async (context) => {
-    //  Queue commands to insert a new range before the
-    //        selected range.
     const doc = context.document;
     const originalRange = doc.getSelection();
     originalRange.insertText("Office 2019, ", "Before");
-
-    // Load the text of the original range and sync so that the
-    //        range text can be read and inserted.
     originalRange.load("text");
     await context.sync();
-
-    // Queue commands to insert the original range as a
-    //        paragraph at the end of the document.
     doc.body.insertParagraph("Current text of original range: " + originalRange.text, "End");
-
-    // Make a final call of context.sync here and ensure
-    //        that it runs after the insertParagraph has been queued.
     await context.sync();
   }).catch(function (error) {
     console.log("Error: " + error);
@@ -145,11 +127,9 @@ async function insertTextBeforeRange() {
 
 async function replaceText() {
   await Word.run(async (context) => {
-    // Queue commands to replace the text.
     const doc = context.document;
     const originalRange = doc.getSelection();
     originalRange.insertText("many", "Replace");
-
     await context.sync();
   }).catch(function (error) {
     console.log("Error: " + error);
@@ -161,9 +141,7 @@ async function replaceText() {
 
 async function insertImage() {
   await Word.run(async (context) => {
-    // Queue commands to insert an image.
     context.document.body.insertInlinePictureFromBase64(base64Image, "End");
-
     await context.sync();
   }).catch(function (error) {
     console.log("Error: " + error);
@@ -175,7 +153,6 @@ async function insertImage() {
 
 async function insertHTML() {
   await Word.run(async (context) => {
-    // Queue commands to insert a string of HTML.
     const blankParagraph = context.document.body.paragraphs.getLast().insertParagraph("", "After");
     blankParagraph.insertHtml('<p style="font-family: verdana;">Inserted HTML.</p><p>Another paragraph</p>', "End");
     await context.sync();
@@ -189,11 +166,7 @@ async function insertHTML() {
 
 async function insertTable() {
   await Word.run(async (context) => {
-    // Queue commands to get a reference to the paragraph
-    //        that will proceed the table.
     const secondParagraph = context.document.body.paragraphs.getFirst().getNext();
-
-    // Queue commands to create a table and populate it with data.
     const tableData = [
       ["Name", "ID", "Birth City"],
       ["Bob", "434", "Chicago"],
@@ -218,7 +191,6 @@ async function createContentControl() {
     serviceNameContentControl.tag = "serviceName";
     serviceNameContentControl.appearance = "Tags";
     serviceNameContentControl.color = "blue";
-
     await context.sync();
   }).catch(function (error) {
     console.log("Error: " + error);
@@ -230,11 +202,8 @@ async function createContentControl() {
 
 async function replaceContentInControl() {
   await Word.run(async (context) => {
-    // Queue commands to replace the text in the Service Name
-    //        content control.
     const serviceNameContentControl = context.document.contentControls.getByTag("serviceName").getFirst();
     serviceNameContentControl.insertText("Fabrikam Online Productivity Suite", "Replace");
-
     await context.sync();
   }).catch(function (error) {
     console.log("Error: " + error);

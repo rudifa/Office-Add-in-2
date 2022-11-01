@@ -13,5 +13,13 @@ This project was created and developed following the MS tutorial [Create a Word 
 - in Word, accept the installation of the add-in
 - click on the  `Show Taskpane` icon
 
-The add-in will be reloaded by the webpack-dev-serveron each code save.
+Normally, the webpack-dev-server reloads the add-in after each code change.
+If in doubt:
 
+-  force reload the MS Word page in the browser
+-  stop and restart the server:
+
+ ```
+ mpm stop
+ npm run start:...
+ ``` 
