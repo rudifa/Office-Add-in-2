@@ -23,3 +23,22 @@ If in doubt:
  mpm stop
  npm run start:...
  ``` 
+
+### Testing with the netlify and the MS Word - web
+
+The add-in is deployed on [netlify](https://office-add-in-2-7d7ee5.netlify.app).
+
+Quick test in a browser: [click](https://office-add-in-2-7d7ee5.netlify.app/taskpane.html) to open the add-in's Welcome page.
+
+Test in the MS Word web app:
+
+- in Word, Insert -> Add-ins -> Upload my Add-in, navigate to a local copy of the [manifest-netlify](https://github.com/rudifa/Office-Add-in-2/blob/main/manifest-netlify.xml) and upload it
+- you may need one or two web page restarts until the add-in icon appears as the rightmost item in the Ribbon
+- try it.
+
+### Testing with the netlify and the MS Word desktop
+
+Not yet done at this stage.
+
+The procedure should be similar to the above procedure for the web.
+
