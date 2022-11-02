@@ -171,13 +171,15 @@ async function insertGithubUsersTable() {
 }
 
 async function appendGithubUserData() {
-  // to the first table in the document
+  const userName = "olange";
+  const url = `https://api.github.com/users/${userName}`;
+  const obj = await fetchFrom(url);
+  const userData = ["login", "name", "location", "bio"].map((key) => obj[key]);
+  console.log(`appendGithubUserData`, userData);
+  // append to the first table in the document
   await Word.run(async (context) => {
     const firstTable = context.document.body.tables.getFirst();
-
-    //console.log(`First table:`, firstTable);
-
-    const tableData = [["rudifa", "Rudi", "Geneva", "I'm a programmer"]];
+    const tableData = [userData];
     firstTable.addRows("End", tableData.length, tableData);
     await context.sync();
   });
@@ -196,6 +198,19 @@ async function tryCatch(callback) {
     // OfficeHelpers.Utilities.log(error);
   }
 }
+
+/**
+ * Fetch data from a URL
+ * @param {*} url
+ * @returns promise that resolves to the JSON object returned by the url
+ */
+async function fetchFrom(url) {
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
+
+// TODO add  input element to get the user name
 
 /*
 addRows(insertLocation:  "Start" | "End", rowCount: number, values?: string[][]): Word.TableRowCollection;
