@@ -19,20 +19,20 @@ Office.onReady((info) => {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
 
-    document.getElementById("insert-github-users-table").onclick = insertGithubUsersTable;
-    document.getElementById("append-github-user-data").onclick = appendGithubUserData;
-    document.getElementById("insert-paragraph").onclick = insertParagraph;
-    document.getElementById("apply-style").onclick = applyStyle;
-    document.getElementById("apply-custom-style").onclick = applyCustomStyle;
-    document.getElementById("change-font").onclick = changeFont;
-    document.getElementById("insert-text-into-range").onclick = insertTextIntoRange;
-    document.getElementById("insert-text-outside-range").onclick = insertTextBeforeRange;
-    document.getElementById("replace-text").onclick = replaceText;
-    document.getElementById("insert-image").onclick = insertImage;
-    document.getElementById("insert-html").onclick = insertHTML;
-    document.getElementById("insert-table").onclick = insertTable;
-    document.getElementById("create-content-control").onclick = createContentControl;
-    document.getElementById("replace-content-in-control").onclick = replaceContentInControl;
+    document.getElementById("insert-github-users-table").onclick = () => tryCatch(insertGithubUsersTable);
+    document.getElementById("append-github-user-data").onclick = () => tryCatch(appendGithubUserData);
+    document.getElementById("insert-paragraph").onclick = () => tryCatch(insertParagraph);
+    document.getElementById("apply-style").onclick = () => tryCatch(applyStyle);
+    document.getElementById("apply-custom-style").onclick = () => tryCatch(applyCustomStyle);
+    document.getElementById("change-font").onclick = () => tryCatch(changeFont);
+    document.getElementById("insert-text-into-range").onclick = () => tryCatch(insertTextIntoRange);
+    document.getElementById("insert-text-outside-range").onclick = () => tryCatch(insertTextBeforeRange);
+    document.getElementById("replace-text").onclick = () => tryCatch(replaceText);
+    document.getElementById("insert-image").onclick = () => tryCatch(insertImage);
+    document.getElementById("insert-html").onclick = () => tryCatch(insertHTML);
+    document.getElementById("insert-table").onclick = () => tryCatch(insertTable);
+    document.getElementById("create-content-control").onclick = () => tryCatch(createContentControl);
+    document.getElementById("replace-content-in-control").onclick = () => tryCatch(replaceContentInControl);
   }
 });
 
@@ -44,11 +44,6 @@ async function insertParagraph() {
       "Start"
     );
     await context.sync();
-  }).catch(function (error) {
-    console.log("Error: " + error);
-    if (error instanceof OfficeExtension.Error) {
-      console.log("Debug info: " + JSON.stringify(error.debugInfo));
-    }
   });
 }
 
@@ -57,11 +52,6 @@ async function applyStyle() {
     const firstParagraph = context.document.body.paragraphs.getFirst();
     firstParagraph.styleBuiltIn = Word.Style.intenseReference;
     await context.sync();
-  }).catch(function (error) {
-    console.log("Error: " + error);
-    if (error instanceof OfficeExtension.Error) {
-      console.log("Debug info: " + JSON.stringify(error.debugInfo));
-    }
   });
 }
 
@@ -70,11 +60,6 @@ async function applyCustomStyle() {
     const lastParagraph = context.document.body.paragraphs.getLast();
     lastParagraph.style = "MyCustomStyle";
     await context.sync();
-  }).catch(function (error) {
-    console.log("Error: " + error);
-    if (error instanceof OfficeExtension.Error) {
-      console.log("Debug info: " + JSON.stringify(error.debugInfo));
-    }
   });
 }
 
@@ -87,11 +72,6 @@ async function changeFont() {
       size: 18,
     });
     await context.sync();
-  }).catch(function (error) {
-    console.log("Error: " + error);
-    if (error instanceof OfficeExtension.Error) {
-      console.log("Debug info: " + JSON.stringify(error.debugInfo));
-    }
   });
 }
 
@@ -104,11 +84,6 @@ async function insertTextIntoRange() {
     await context.sync();
     doc.body.insertParagraph("Original range: " + originalRange.text, "End");
     await context.sync();
-  }).catch(function (error) {
-    console.log("Error: " + error);
-    if (error instanceof OfficeExtension.Error) {
-      console.log("Debug info: " + JSON.stringify(error.debugInfo));
-    }
   });
 }
 
@@ -121,11 +96,6 @@ async function insertTextBeforeRange() {
     await context.sync();
     doc.body.insertParagraph("Current text of original range: " + originalRange.text, "End");
     await context.sync();
-  }).catch(function (error) {
-    console.log("Error: " + error);
-    if (error instanceof OfficeExtension.Error) {
-      console.log("Debug info: " + JSON.stringify(error.debugInfo));
-    }
   });
 }
 
@@ -135,11 +105,6 @@ async function replaceText() {
     const originalRange = doc.getSelection();
     originalRange.insertText("many", "Replace");
     await context.sync();
-  }).catch(function (error) {
-    console.log("Error: " + error);
-    if (error instanceof OfficeExtension.Error) {
-      console.log("Debug info: " + JSON.stringify(error.debugInfo));
-    }
   });
 }
 
@@ -147,11 +112,6 @@ async function insertImage() {
   await Word.run(async (context) => {
     context.document.body.insertInlinePictureFromBase64(base64Image, "End");
     await context.sync();
-  }).catch(function (error) {
-    console.log("Error: " + error);
-    if (error instanceof OfficeExtension.Error) {
-      console.log("Debug info: " + JSON.stringify(error.debugInfo));
-    }
   });
 }
 
@@ -160,11 +120,6 @@ async function insertHTML() {
     const blankParagraph = context.document.body.paragraphs.getLast().insertParagraph("", "After");
     blankParagraph.insertHtml('<p style="font-family: verdana;">Inserted HTML.</p><p>Another paragraph</p>', "End");
     await context.sync();
-  }).catch(function (error) {
-    console.log("Error: " + error);
-    if (error instanceof OfficeExtension.Error) {
-      console.log("Debug info: " + JSON.stringify(error.debugInfo));
-    }
   });
 }
 
@@ -178,11 +133,6 @@ async function insertTable() {
     ];
     secondParagraph.insertTable(3, 3, "After", tableData);
     await context.sync();
-  }).catch(function (error) {
-    console.log("Error: " + error);
-    if (error instanceof OfficeExtension.Error) {
-      console.log("Debug info: " + JSON.stringify(error.debugInfo));
-    }
   });
 }
 
@@ -196,11 +146,6 @@ async function createContentControl() {
     serviceNameContentControl.appearance = "Tags";
     serviceNameContentControl.color = "blue";
     await context.sync();
-  }).catch(function (error) {
-    console.log("Error: " + error);
-    if (error instanceof OfficeExtension.Error) {
-      console.log("Debug info: " + JSON.stringify(error.debugInfo));
-    }
   });
 }
 
@@ -209,11 +154,6 @@ async function replaceContentInControl() {
     const serviceNameContentControl = context.document.contentControls.getByTag("serviceName").getFirst();
     serviceNameContentControl.insertText("Fabrikam Online Productivity Suite", "Replace");
     await context.sync();
-  }).catch(function (error) {
-    console.log("Error: " + error);
-    if (error instanceof OfficeExtension.Error) {
-      console.log("Debug info: " + JSON.stringify(error.debugInfo));
-    }
   });
 }
 
@@ -227,11 +167,6 @@ async function insertGithubUsersTable() {
     table.headerRowCount = 1;
     table.styleBuiltIn = Word.Style.gridTable5Dark_Accent2;
     await context.sync();
-  }).catch(function (error) {
-    console.log("Error: " + error);
-    if (error instanceof OfficeExtension.Error) {
-      console.log("Debug info: " + JSON.stringify(error.debugInfo));
-    }
   });
 }
 
@@ -245,12 +180,21 @@ async function appendGithubUserData() {
     const tableData = [["rudifa", "Rudi", "Geneva", "I'm a programmer"]];
     firstTable.addRows("End", tableData.length, tableData);
     await context.sync();
-  }).catch(function (error) {
+  });
+}
+
+// Default helper for invoking an action and handling errors.
+async function tryCatch(callback) {
+  try {
+    await callback();
+  } catch (error) {
     console.log("Error: " + error);
     if (error instanceof OfficeExtension.Error) {
       console.log("Debug info: " + JSON.stringify(error.debugInfo));
     }
-  });
+    // OfficeHelpers.UI.notify(error);
+    // OfficeHelpers.Utilities.log(error);
+  }
 }
 
 /*
@@ -291,16 +235,5 @@ async function run() {
 
         await context.sync();
     });
-}
-
-// Default helper for invoking an action and handling errors. 
-async function tryCatch(callback) {
-  try {
-      await callback();
-  }
-  catch (error) {
-      OfficeHelpers.UI.notify(error);
-      OfficeHelpers.Utilities.log(error);
-  }
 }
 */
