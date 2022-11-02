@@ -15,8 +15,13 @@ Office.onReady((info) => {
     }
 
     // Assign event handlers and other initialization logic.
+
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
+
+
+    document.getElementById("insert-github-users-table").onclick = insertGithubUsersTable;
+
     document.getElementById("insert-paragraph").onclick = insertParagraph;
     document.getElementById("apply-style").onclick = applyStyle;
     document.getElementById("apply-custom-style").onclick = applyCustomStyle;
@@ -204,6 +209,23 @@ async function replaceContentInControl() {
   await Word.run(async (context) => {
     const serviceNameContentControl = context.document.contentControls.getByTag("serviceName").getFirst();
     serviceNameContentControl.insertText("Fabrikam Online Productivity Suite", "Replace");
+    await context.sync();
+  }).catch(function (error) {
+    console.log("Error: " + error);
+    if (error instanceof OfficeExtension.Error) {
+      console.log("Debug info: " + JSON.stringify(error.debugInfo));
+    }
+  });
+}
+   
+async function insertGithubUsersTable () {
+  await Word.run(async (context) => {
+    const tableData = [
+      ["login", "name", "location", "bio"],
+      ["alison-mk", "Alison", "London", "I'm a developer"],
+    ];
+    const table = context.document.body.insertTable(tableData.length, tableData[0].length, "Start", tableData);
+    table.headerRowCount = 1;
     await context.sync();
   }).catch(function (error) {
     console.log("Error: " + error);
