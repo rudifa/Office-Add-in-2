@@ -19,9 +19,8 @@ Office.onReady((info) => {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
 
-
     document.getElementById("insert-github-users-table").onclick = insertGithubUsersTable;
-
+    document.getElementById("append-github-user-data").onclick = appendGithubUserData;
     document.getElementById("insert-paragraph").onclick = insertParagraph;
     document.getElementById("apply-style").onclick = applyStyle;
     document.getElementById("apply-custom-style").onclick = applyCustomStyle;
@@ -217,8 +216,8 @@ async function replaceContentInControl() {
     }
   });
 }
-   
-async function insertGithubUsersTable () {
+
+async function insertGithubUsersTable() {
   await Word.run(async (context) => {
     const tableData = [
       ["login", "name", "location", "bio"],
@@ -226,6 +225,7 @@ async function insertGithubUsersTable () {
     ];
     const table = context.document.body.insertTable(tableData.length, tableData[0].length, "Start", tableData);
     table.headerRowCount = 1;
+    table.styleBuiltIn = Word.Style.gridTable5Dark_Accent2;
     await context.sync();
   }).catch(function (error) {
     console.log("Error: " + error);
@@ -234,3 +234,73 @@ async function insertGithubUsersTable () {
     }
   });
 }
+
+async function appendGithubUserData() {
+  // to the first table in the document
+  await Word.run(async (context) => {
+    const firstTable = context.document.body.tables.getFirst();
+
+    //console.log(`First table:`, firstTable);
+
+    const tableData = [["rudifa", "Rudi", "Geneva", "I'm a programmer"]];
+    firstTable.addRows("End", tableData.length, tableData);
+    await context.sync();
+  }).catch(function (error) {
+    console.log("Error: " + error);
+    if (error instanceof OfficeExtension.Error) {
+      console.log("Debug info: " + JSON.stringify(error.debugInfo));
+    }
+  });
+}
+
+/*
+addRows(insertLocation:  "Start" | "End", rowCount: number, values?: string[][]): Word.TableRowCollection;
+*/
+
+/* https://xomino.com/category/office-add-in/
+async function runAllTables() {
+  await Word.run(async (context) => {
+    const tableCollection = context.document.body.tables;
+    // Queue a commmand to load the results.
+    context.load(tableCollection);
+    await context.sync();
+    //cycle through the tbale collection and test the first cell of each table looking for insects
+    for (var i = 0; i < tableCollection.items.length; i++) {
+      var theTable = null;
+      theTable = tableCollection.items[i];
+      var cell1 = theTable.values[0][0];
+      if (cell1 == "Insects") {
+        //once found, load the table in memory and add a row
+        context.load(theTable, "");
+        await context.sync();
+        let numRows = theTable.rowCount.toString();
+        theTable.addRows("End", 1, [[numRows, "Lightning Bug"]]);
+      }
+    }
+  });
+}
+*/
+
+/*
+$("#run").click(() => tryCatch(run));
+
+async function run() {
+    await Word.run(async (context) => {
+        const range = context.document.getSelection();
+        range.font.color = "blue";
+
+        await context.sync();
+    });
+}
+
+// Default helper for invoking an action and handling errors. 
+async function tryCatch(callback) {
+  try {
+      await callback();
+  }
+  catch (error) {
+      OfficeHelpers.UI.notify(error);
+      OfficeHelpers.Utilities.log(error);
+  }
+}
+*/
