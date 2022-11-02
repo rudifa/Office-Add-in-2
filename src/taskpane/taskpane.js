@@ -21,6 +21,7 @@ Office.onReady((info) => {
 
     document.getElementById("insert-github-users-table").onclick = () => tryCatch(insertGithubUsersTable);
     document.getElementById("append-github-user-data").onclick = () => tryCatch(appendGithubUserData);
+
     document.getElementById("insert-paragraph").onclick = () => tryCatch(insertParagraph);
     document.getElementById("apply-style").onclick = () => tryCatch(applyStyle);
     document.getElementById("apply-custom-style").onclick = () => tryCatch(applyCustomStyle);
@@ -171,7 +172,7 @@ async function insertGithubUsersTable() {
 }
 
 async function appendGithubUserData() {
-  const userName = "olange";
+  const userName = getUserName();
   const url = `https://api.github.com/users/${userName}`;
   const obj = await fetchFrom(url);
   const userData = ["login", "name", "location", "bio"].map((key) => obj[key]);
@@ -183,6 +184,13 @@ async function appendGithubUserData() {
     firstTable.addRows("End", tableData.length, tableData);
     await context.sync();
   });
+}
+
+// Helper function to get user name from input element
+function getUserName() {
+  const userName = document.getElementById("github-user-name").value;
+  console.log(`getUserName`, userName);
+  return userName;
 }
 
 // Default helper for invoking an action and handling errors.
@@ -206,6 +214,10 @@ async function tryCatch(callback) {
  */
 async function fetchFrom(url) {
   const response = await fetch(url);
+  if (!response.ok) {
+    //console.log(response);
+    throw new Error(`status: ${response.status}`);
+  }
   const data = await response.json();
   return data;
 }
