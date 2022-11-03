@@ -22,6 +22,8 @@ Office.onReady((info) => {
     document.getElementById("insert-github-users-table").onclick = () => tryCatch(findOrInsertGithubUsersTable);
     document.getElementById("update-github-user-data").onclick = () => tryCatch(updateGithubUserData);
 
+    document.getElementById("test-async").onclick = () => tryCatch(testAsync);
+
     document.getElementById("insert-paragraph").onclick = () => tryCatch(insertParagraph);
     document.getElementById("apply-style").onclick = () => tryCatch(applyStyle);
     document.getElementById("apply-custom-style").onclick = () => tryCatch(applyCustomStyle);
@@ -160,10 +162,7 @@ async function replaceContentInControl() {
 
 async function insertGithubUsersTable() {
   await Word.run(async (context) => {
-    const tableData = [
-      ["login", "name", "location", "bio"],
-      ["alison-mk", "Alison", "London", "I'm a developer"],
-    ];
+    const tableData = [["login", "name", "location", "bio"]];
     const table = context.document.body.insertTable(tableData.length, tableData[0].length, "Start", tableData);
     table.headerRowCount = 1;
     table.styleBuiltIn = Word.Style.gridTable5Dark_Accent2;
@@ -172,12 +171,18 @@ async function insertGithubUsersTable() {
 }
 
 async function updateGithubUserData() {
+  // get the user's name from the user input.
   const userName = getUserName();
+  // fetch the user's data from the GitHub API.
   const url = `https://api.github.com/users/${userName}`;
   const obj = await fetchFrom(url);
+  // prepare the data for the table.
   const userData = ["login", "name", "location", "bio"].map((key) => obj[key]);
-  console.log(`appendGithubUserData`, userData);
+  // console.log(`appendGithubUserData`, userData);
+  // get the user data from the table (if present)
+
   // append to the first table in the document
+  // TODO find the tqble
   await Word.run(async (context) => {
     const firstTable = context.document.body.tables.getFirst();
     const tableData = [userData];
@@ -195,23 +200,42 @@ function getUserName() {
 
 async function findOrInsertGithubUsersTable() {
   await Word.run(async (context) => {
+    const tableFound = await findGithubUsersTable();
+    console.log(`findOrInsertGithubUsersTable`, tableFound);
+    if (!tableFound) {
+      await insertGithubUsersTable();
+    }
+  });
+}
+
+async function findGithubUsersTable() {
+  var tableFound = false;
+  await Word.run(async (context) => {
     const tableCollection = context.document.body.tables;
     // Queue a commmand to load the results.
     context.load(tableCollection);
     await context.sync();
-    var tableFound = null;
     //cycle through the table collection and test the first cell of each table looking for insects
     for (var i = 0; i < tableCollection.items.length; i++) {
       const table = tableCollection.items[i];
       var cell00 = table.values[0][0];
       if (cell00 == "login") {
-        tableFound = table;
-        displayInfoMessage("Found the table");
+        tableFound = true;
+        break;
       }
     }
-    if (tableFound == null) {
-      await insertGithubUsersTable();
-    }
+    console.log(`findGithubUsersTable`, tableFound);
+  });
+  return tableFound;
+}
+
+async function testAsync() {
+  await Word.run(async (context) => {
+    const table = await findGithubUsersTable();
+    console.log(`testAsync`, table);
+    context.load(table);
+    await context.sync();
+    console.log(`testAsync loaded`, table);
   });
 }
 
