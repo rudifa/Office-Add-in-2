@@ -19,21 +19,23 @@
     />
 
     <!-- Template styles -->
-    <link href="taskpane.css" type="text/css" rel="stylesheet" />
+    <link href="taskpane.css" type="text/css"  rel="stylesheet" />
   </head>
 
   <body class="ms-font-m ms-welcome ms-Fabric">
+    <!--
     <header class="ms-welcome__header ms-bgColor-neutralLighter">
-      <img width="0" height="0" src="../../assets/logo-filled.png" alt="Contoso" title="Contoso" />
-      <h2 class="ms-font-su">Welcome</h2>
-      <a href="https://learn.microsoft.com/en-us/office/dev/add-ins/tutorials/word-tutorial" target="_blank"
-        >based on the tutorial</a
-      >
+      <h6 class="ms-font-su">Welcome</h6>
     </header>
+    -->
     <section id="sideload-msg" class="ms-welcome__main">
       <h2 class="ms-font-xl">Please sideload your add-in to see app body.</h2>
     </section>
     <main id="app-body" class="ms-welcome__main" style="display: none">
+      <section class="ms-welcome__header ms-bgColor-neutralLighter" style="width: 100%;">
+        <p id="p-message"></p>
+      </section>
+      <br />
       <button class="ms-Button" id="find-github-users-table">Find github users table</button><br />
       <button class="ms-Button" id="insert-github-users-table">Insert github users table</button><br />
       <button class="ms-Button" id="append-github-user-data">Append github user data</button><br />

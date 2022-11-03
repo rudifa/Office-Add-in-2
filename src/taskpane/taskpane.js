@@ -204,13 +204,14 @@ async function findGithubUsersTable() {
     for (var i = 0; i < tableCollection.items.length; i++) {
       var theTable = null;
       theTable = tableCollection.items[i];
-      var cell1 = theTable.values[0][0];
-      if (cell1 == "login") {
+      var cell00 = theTable.values[0][0];
+      if (cell00 == "login") {
         //once found, load the table in memory and add a row
         context.load(theTable, "");
         await context.sync();
         let numRows = theTable.rowCount.toString();
-        theTable.addRows("End", 1, [[numRows, "Lightning Bug"]]);
+        // theTable.addRows("End", 1, [[numRows, "Lightning Bug"]]);
+        displayInfoMessage("Found the table");
       }
     }
   });
@@ -220,18 +221,18 @@ async function findGithubUsersTable() {
  * utilities
  */
 
-// Default helper for invoking an action and handling errors.
-async function tryCatch(callback) {
-  try {
-    await callback();
-  } catch (error) {
-    console.log("Error: " + error);
-    if (error instanceof OfficeExtension.Error) {
-      console.log("Debug info: " + JSON.stringify(error.debugInfo));
-    }
-    // OfficeHelpers.UI.notify(error);
-    // OfficeHelpers.Utilities.log(error);
-  }
+function displayInfoMessage(message) {
+ displayMessage(message, "blue");
+}
+
+function displayErrorMessage(message) {
+  displayMessage(message, "red");
+}
+
+function displayMessage(message, color) {
+  const paragraph = document.getElementById("p-message");
+  paragraph.innerText = message;
+  paragraph.style.color = color;
 }
 
 /**
@@ -247,6 +248,24 @@ async function fetchFrom(url) {
   }
   const data = await response.json();
   return data;
+}
+
+// Default helper for invoking an action and handling errors.
+async function tryCatch(callback) {
+  displayMessage("");
+  try {
+    await callback();
+  } catch (error) {
+    console.log(error);
+    displayErrorMessage(error);
+
+    if (error instanceof OfficeExtension.Error) {
+      const debugInfo = JSON.stringify(error.debugInfo)
+      console.log("Debug info: " + debugInfo);
+    }
+    // OfficeHelpers.UI.notify(error);
+    // OfficeHelpers.Utilities.log(error);
+  }
 }
 
 // TODO add  input element to get the user name
