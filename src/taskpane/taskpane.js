@@ -19,6 +19,7 @@ Office.onReady((info) => {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
 
+    document.getElementById("find-github-users-table").onclick = () => tryCatch(findGithubUsersTable);
     document.getElementById("insert-github-users-table").onclick = () => tryCatch(insertGithubUsersTable);
     document.getElementById("append-github-user-data").onclick = () => tryCatch(appendGithubUserData);
 
@@ -192,6 +193,32 @@ function getUserName() {
   console.log(`getUserName`, userName);
   return userName;
 }
+
+async function findGithubUsersTable() {
+  await Word.run(async (context) => {
+    const tableCollection = context.document.body.tables;
+    // Queue a commmand to load the results.
+    context.load(tableCollection);
+    await context.sync();
+    //cycle through the table collection and test the first cell of each table looking for insects
+    for (var i = 0; i < tableCollection.items.length; i++) {
+      var theTable = null;
+      theTable = tableCollection.items[i];
+      var cell1 = theTable.values[0][0];
+      if (cell1 == "login") {
+        //once found, load the table in memory and add a row
+        context.load(theTable, "");
+        await context.sync();
+        let numRows = theTable.rowCount.toString();
+        theTable.addRows("End", 1, [[numRows, "Lightning Bug"]]);
+      }
+    }
+  });
+}
+
+/**
+ * utilities
+ */
 
 // Default helper for invoking an action and handling errors.
 async function tryCatch(callback) {
