@@ -170,25 +170,21 @@ async function insertGithubUsersTable() {
   });
 }
 
-async function updateGithubUserData() {
-  // get the user's name from the user input.
+async function _addRow(context, firstTable, userData) {
+  const tableData = [userData];
+  firstTable.addRows("End", tableData.length, tableData);
+  await context.sync();
+}
+
+async function _fetchUserData() {
   const userName = getUserName();
   // fetch the user's data from the GitHub API.
   const url = `https://api.github.com/users/${userName}`;
   const obj = await fetchFrom(url);
   // prepare the data for the table.
-  const userData = ["login", "name", "location", "bio"].map((key) => obj[key]);
-  // console.log(`appendGithubUserData`, userData);
-  // get the user data from the table (if present)
-
-  // append to the first table in the document
-  // TODO find the tqble
-  await Word.run(async (context) => {
-    const firstTable = context.document.body.tables.getFirst();
-    const tableData = [userData];
-    firstTable.addRows("End", tableData.length, tableData);
-    await context.sync();
-  });
+  const userData = ["login", "name", "location", "bio"].map((key) => obj[key] || "");
+  console.log(`updateGithubUserData`, userData);
+  return userData;
 }
 
 // Helper function to get user name from input element
@@ -211,6 +207,7 @@ async function findOrInsertGithubUsersTable() {
 async function findGithubUsersTable() {
   var tableFound = false;
   await Word.run(async (context) => {
+    // find a table with the tag "githubUsers"
     const tableCollection = context.document.body.tables;
     // Queue a commmand to load the results.
     context.load(tableCollection);
@@ -229,13 +226,133 @@ async function findGithubUsersTable() {
   return tableFound;
 }
 
+async function updateGithubUserData() {
+  await Word.run(async (context) => {
+    var tableFound = await _findGithubUsersTable(context);
+    console.log(`testAsync`, tableFound);
+    if (!tableFound) {
+      await insertGithubUsersTable();
+      tableFound = await _findGithubUsersTable(context);
+    }
+    context.load(tableFound);
+    await context.sync();
+    console.log(`testAsync loaded tableFound`, tableFound);
+
+    // await _logAllCellValues(context, tableFound);
+
+    const userData = await _fetchUserData();
+    const userName = userData[0];
+    const rowFound = await _findMatchingRow(context, tableFound, userName);
+    console.log(`testAsync rowFound`, rowFound);
+
+    if (!rowFound) {
+      await _addRow(context, tableFound, userData);
+    } else {
+      await _updateRow(context, rowFound, userData);
+    }
+  });
+}
+
+async function _updateRow(context, rowFound, userData) {
+  console.log(`_updateRow`, rowFound, userData);
+  rowFound.values = [userData];
+  await context.sync();
+}
+
+async function _findMatchingRow(context, tableFound, cell0Value) {
+  const tableRows = tableFound.rows;
+  context.load(tableRows);
+  await context.sync();
+  console.log(`_findMatchingRow loaded tableRows`, tableRows);
+  let rowFound = null;
+  for (var i = 0; i < tableRows.items.length; i++) {
+    const tableRow = tableRows.items[i];
+    console.log(`_findMatchingRow tableRow 1`, tableRow);
+    const tableRowCells = tableRow.cells;
+    context.load(tableRow);
+    context.load(tableRowCells);
+
+    await context.sync();
+    console.log(`_findMatchingRow tableRow 2`, tableRow);
+
+    console.log(`_findMatchingRow loaded tableRowCells ${i}`, tableRowCells);
+    const tableRowCell0 = tableRowCells.items[0];
+    console.log(`_findMatchingRow loaded tableRowCell ${i}`, tableRowCell0.value);
+    if (tableRowCell0.value === cell0Value) {
+      console.log(`_findMatchingRow found matching row`, tableRow);
+      rowFound = tableRow;
+      console.log(`_findMatchingRow rowFound`, rowFound);
+    }
+  }
+  console.log(`_findMatchingRow rowFound`, rowFound);
+  return rowFound;
+}
+
+async function _findGithubUsersTable(context) {
+  const tableCollection = context.document.body.tables;
+  // Queue a commmand to load the results.
+  context.load(tableCollection);
+  await context.sync();
+  var tableFound = null;
+  //cycle through the table collection and test the first cell of each table looking for insects
+  for (var i = 0; i < tableCollection.items.length; i++) {
+    const table = tableCollection.items[i];
+    var cell00 = table.values[0][0];
+    if (cell00 == "login") {
+      tableFound = table;
+      break;
+    }
+  }
+  return tableFound;
+}
+
+/**
+ * Leftovers from earlier code versions
+ */
+
 async function testAsync() {
   await Word.run(async (context) => {
-    const table = await findGithubUsersTable();
-    console.log(`testAsync`, table);
-    context.load(table);
+    var tableFound = await _findGithubUsersTable(context);
+    console.log(`testAsync`, tableFound);
+    if (!tableFound) {
+      await insertGithubUsersTable();
+      tableFound = await _findGithubUsersTable(context);
+    }
+    context.load(tableFound);
     await context.sync();
-    console.log(`testAsync loaded`, table);
+    console.log(`testAsync loaded`, tableFound);
+  });
+}
+
+async function _logAllCellValues(context, tableFound) {
+  const tableRows = tableFound.rows;
+  context.load(tableRows);
+  await context.sync();
+  console.log(`_logAllCellValues loaded tableRows`, tableRows);
+  for (var i = 0; i < tableRows.items.length; i++) {
+    const tableRow = tableRows.items[i];
+    const tableRowCells = tableRow.cells;
+    context.load(tableRowCells);
+    await context.sync();
+    console.log(`_logAllCellValues loaded tableRowCells ${i}`, tableRowCells);
+    for (var j = 0; j < tableRowCells.items.length; j++) {
+      const tableRowCell = tableRowCells.items[j];
+      //const tableRowCellValue = tableRowCell.values[0][0];
+      console.log(`_logAllCellValues loaded tableRowCell ${i},${j}`, tableRowCell.value);
+    }
+  }
+}
+
+async function updateGithubUserData_0() {
+  // get the user's name from the user input.
+  const userData = await _fetchUserData();
+  // get the user data from the table (if present)
+
+  // append to the first table in the document
+  // TODO find the table
+  await Word.run(async (context) => {
+    const firstTable = context.document.body.tables.getFirst();
+    await _addRow(context, firstTable, userData);
   });
 }
 
@@ -289,8 +406,6 @@ async function tryCatch(callback) {
     // OfficeHelpers.Utilities.log(error);
   }
 }
-
-// TODO add  input element to get the user name
 
 /*
 addRows(insertLocation:  "Start" | "End", rowCount: number, values?: string[][]): Word.TableRowCollection;
