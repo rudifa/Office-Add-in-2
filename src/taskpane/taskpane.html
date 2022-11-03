@@ -18,27 +18,21 @@
       href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css"
     />
 
-    <!-- Template styles -->
-    <link href="taskpane.css" type="text/css"  rel="stylesheet" />
+    <!-- Template styles    -->
+    <link rel="stylesheet" type="text/css" href="taskpane.css" fetchpriority="high" rel="noopener noreferrer"/>
   </head>
 
   <body class="ms-font-m ms-welcome ms-Fabric">
-    <!--
-    <header class="ms-welcome__header ms-bgColor-neutralLighter">
-      <h6 class="ms-font-su">Welcome</h6>
-    </header>
-    -->
     <section id="sideload-msg" class="ms-welcome__main">
       <h2 class="ms-font-xl">Please sideload your add-in to see app body.</h2>
     </section>
     <main id="app-body" class="ms-welcome__main" style="display: none">
-      <section class="ms-welcome__header ms-bgColor-neutralLighter" style="width: 100%;">
+      <section class="ms-welcome__header ms-bgColor-neutralLighter">
         <p id="p-message"></p>
       </section>
       <br />
-      <button class="ms-Button" id="find-github-users-table">Find github users table</button><br />
       <button class="ms-Button" id="insert-github-users-table">Insert github users table</button><br />
-      <button class="ms-Button" id="append-github-user-data">Append github user data</button><br />
+      <button class="ms-Button" id="update-github-user-data">Update github user data</button><br />
 
       <!-- add  input element to get the user name -->
       <input type="text" id="github-user-name" placeholder="Enter github user name" />

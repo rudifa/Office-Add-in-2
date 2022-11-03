@@ -3,7 +3,7 @@
  * See LICENSE in the project root for license information.
  */
 
-/* global document, Office, Word */
+/* global Office, Word */
 
 import { base64Image } from "../../base64Image";
 
@@ -19,9 +19,8 @@ Office.onReady((info) => {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
 
-    document.getElementById("find-github-users-table").onclick = () => tryCatch(findGithubUsersTable);
-    document.getElementById("insert-github-users-table").onclick = () => tryCatch(insertGithubUsersTable);
-    document.getElementById("append-github-user-data").onclick = () => tryCatch(appendGithubUserData);
+    document.getElementById("insert-github-users-table").onclick = () => tryCatch(findOrInsertGithubUsersTable);
+    document.getElementById("update-github-user-data").onclick = () => tryCatch(updateGithubUserData);
 
     document.getElementById("insert-paragraph").onclick = () => tryCatch(insertParagraph);
     document.getElementById("apply-style").onclick = () => tryCatch(applyStyle);
@@ -172,7 +171,7 @@ async function insertGithubUsersTable() {
   });
 }
 
-async function appendGithubUserData() {
+async function updateGithubUserData() {
   const userName = getUserName();
   const url = `https://api.github.com/users/${userName}`;
   const obj = await fetchFrom(url);
@@ -194,25 +193,24 @@ function getUserName() {
   return userName;
 }
 
-async function findGithubUsersTable() {
+async function findOrInsertGithubUsersTable() {
   await Word.run(async (context) => {
     const tableCollection = context.document.body.tables;
     // Queue a commmand to load the results.
     context.load(tableCollection);
     await context.sync();
+    var tableFound = null;
     //cycle through the table collection and test the first cell of each table looking for insects
     for (var i = 0; i < tableCollection.items.length; i++) {
-      var theTable = null;
-      theTable = tableCollection.items[i];
-      var cell00 = theTable.values[0][0];
+      const table = tableCollection.items[i];
+      var cell00 = table.values[0][0];
       if (cell00 == "login") {
-        //once found, load the table in memory and add a row
-        context.load(theTable, "");
-        await context.sync();
-        let numRows = theTable.rowCount.toString();
-        // theTable.addRows("End", 1, [[numRows, "Lightning Bug"]]);
+        tableFound = table;
         displayInfoMessage("Found the table");
       }
+    }
+    if (tableFound == null) {
+      await insertGithubUsersTable();
     }
   });
 }
@@ -222,7 +220,7 @@ async function findGithubUsersTable() {
  */
 
 function displayInfoMessage(message) {
- displayMessage(message, "blue");
+  displayMessage(message, "blue");
 }
 
 function displayErrorMessage(message) {
@@ -260,7 +258,7 @@ async function tryCatch(callback) {
     displayErrorMessage(error);
 
     if (error instanceof OfficeExtension.Error) {
-      const debugInfo = JSON.stringify(error.debugInfo)
+      const debugInfo = JSON.stringify(error.debugInfo);
       console.log("Debug info: " + debugInfo);
     }
     // OfficeHelpers.UI.notify(error);

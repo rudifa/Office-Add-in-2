@@ -23,6 +23,7 @@
     -webkit-flex-direction: column;
     flex-direction: column;
     align-items: center;
+    width: 100%;
  }
 
  .ms-welcome__main {
