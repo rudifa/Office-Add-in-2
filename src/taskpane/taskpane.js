@@ -39,127 +39,6 @@ Office.onReady((info) => {
   }
 });
 
-async function insertParagraph() {
-  await Word.run(async (context) => {
-    const docBody = context.document.body;
-    docBody.insertParagraph(
-      "Office has several versions, including Office 2016, Microsoft 365 subscription, and Office on the web.",
-      "Start"
-    );
-    await context.sync();
-  });
-}
-
-async function applyStyle() {
-  await Word.run(async (context) => {
-    const firstParagraph = context.document.body.paragraphs.getFirst();
-    firstParagraph.styleBuiltIn = Word.Style.intenseReference;
-    await context.sync();
-  });
-}
-
-async function applyCustomStyle() {
-  await Word.run(async (context) => {
-    const lastParagraph = context.document.body.paragraphs.getLast();
-    lastParagraph.style = "MyCustomStyle";
-    await context.sync();
-  });
-}
-
-async function changeFont() {
-  await Word.run(async (context) => {
-    const secondParagraph = context.document.body.paragraphs.getFirst().getNext();
-    secondParagraph.font.set({
-      name: "Courier New",
-      bold: true,
-      size: 18,
-    });
-    await context.sync();
-  });
-}
-
-async function insertTextIntoRange() {
-  await Word.run(async (context) => {
-    const doc = context.document;
-    const originalRange = doc.getSelection();
-    originalRange.insertText(" (C2R)", "End");
-    originalRange.load("text");
-    await context.sync();
-    doc.body.insertParagraph("Original range: " + originalRange.text, "End");
-    await context.sync();
-  });
-}
-
-async function insertTextBeforeRange() {
-  await Word.run(async (context) => {
-    const doc = context.document;
-    const originalRange = doc.getSelection();
-    originalRange.insertText("Office 2019, ", "Before");
-    originalRange.load("text");
-    await context.sync();
-    doc.body.insertParagraph("Current text of original range: " + originalRange.text, "End");
-    await context.sync();
-  });
-}
-
-async function replaceText() {
-  await Word.run(async (context) => {
-    const doc = context.document;
-    const originalRange = doc.getSelection();
-    originalRange.insertText("many", "Replace");
-    await context.sync();
-  });
-}
-
-async function insertImage() {
-  await Word.run(async (context) => {
-    context.document.body.insertInlinePictureFromBase64(base64Image, "End");
-    await context.sync();
-  });
-}
-
-async function insertHTML() {
-  await Word.run(async (context) => {
-    const blankParagraph = context.document.body.paragraphs.getLast().insertParagraph("", "After");
-    blankParagraph.insertHtml('<p style="font-family: verdana;">Inserted HTML.</p><p>Another paragraph</p>', "End");
-    await context.sync();
-  });
-}
-
-async function insertTable() {
-  await Word.run(async (context) => {
-    const secondParagraph = context.document.body.paragraphs.getFirst().getNext();
-    const tableData = [
-      ["Name", "ID", "Birth City"],
-      ["Bob", "434", "Chicago"],
-      ["Sue", "719", "Havana"],
-    ];
-    secondParagraph.insertTable(3, 3, "After", tableData);
-    await context.sync();
-  });
-}
-
-async function createContentControl() {
-  await Word.run(async (context) => {
-    // Queue commands to create a content control.
-    const serviceNameRange = context.document.getSelection();
-    const serviceNameContentControl = serviceNameRange.insertContentControl();
-    serviceNameContentControl.title = "Service Name";
-    serviceNameContentControl.tag = "serviceName";
-    serviceNameContentControl.appearance = "Tags";
-    serviceNameContentControl.color = "blue";
-    await context.sync();
-  });
-}
-
-async function replaceContentInControl() {
-  await Word.run(async (context) => {
-    const serviceNameContentControl = context.document.contentControls.getByTag("serviceName").getFirst();
-    serviceNameContentControl.insertText("Fabrikam Online Productivity Suite", "Replace");
-    await context.sync();
-  });
-}
-
 async function insertGithubUsersTable() {
   await Word.run(async (context) => {
     const tableData = [["login", "name", "location", "bio"]];
@@ -405,6 +284,131 @@ async function tryCatch(callback) {
     // OfficeHelpers.UI.notify(error);
     // OfficeHelpers.Utilities.log(error);
   }
+}
+
+/**
+ * Functions from the tutorial
+ */
+
+async function insertParagraph() {
+  await Word.run(async (context) => {
+    const docBody = context.document.body;
+    docBody.insertParagraph(
+      "Office has several versions, including Office 2016, Microsoft 365 subscription, and Office on the web.",
+      "Start"
+    );
+    await context.sync();
+  });
+}
+
+async function applyStyle() {
+  await Word.run(async (context) => {
+    const firstParagraph = context.document.body.paragraphs.getFirst();
+    firstParagraph.styleBuiltIn = Word.Style.intenseReference;
+    await context.sync();
+  });
+}
+
+async function applyCustomStyle() {
+  await Word.run(async (context) => {
+    const lastParagraph = context.document.body.paragraphs.getLast();
+    lastParagraph.style = "MyCustomStyle";
+    await context.sync();
+  });
+}
+
+async function changeFont() {
+  await Word.run(async (context) => {
+    const secondParagraph = context.document.body.paragraphs.getFirst().getNext();
+    secondParagraph.font.set({
+      name: "Courier New",
+      bold: true,
+      size: 18,
+    });
+    await context.sync();
+  });
+}
+
+async function insertTextIntoRange() {
+  await Word.run(async (context) => {
+    const doc = context.document;
+    const originalRange = doc.getSelection();
+    originalRange.insertText(" (C2R)", "End");
+    originalRange.load("text");
+    await context.sync();
+    doc.body.insertParagraph("Original range: " + originalRange.text, "End");
+    await context.sync();
+  });
+}
+
+async function insertTextBeforeRange() {
+  await Word.run(async (context) => {
+    const doc = context.document;
+    const originalRange = doc.getSelection();
+    originalRange.insertText("Office 2019, ", "Before");
+    originalRange.load("text");
+    await context.sync();
+    doc.body.insertParagraph("Current text of original range: " + originalRange.text, "End");
+    await context.sync();
+  });
+}
+
+async function replaceText() {
+  await Word.run(async (context) => {
+    const doc = context.document;
+    const originalRange = doc.getSelection();
+    originalRange.insertText("many", "Replace");
+    await context.sync();
+  });
+}
+
+async function insertImage() {
+  await Word.run(async (context) => {
+    context.document.body.insertInlinePictureFromBase64(base64Image, "End");
+    await context.sync();
+  });
+}
+
+async function insertHTML() {
+  await Word.run(async (context) => {
+    const blankParagraph = context.document.body.paragraphs.getLast().insertParagraph("", "After");
+    blankParagraph.insertHtml('<p style="font-family: verdana;">Inserted HTML.</p><p>Another paragraph</p>', "End");
+    await context.sync();
+  });
+}
+
+async function insertTable() {
+  await Word.run(async (context) => {
+    const secondParagraph = context.document.body.paragraphs.getFirst().getNext();
+    const tableData = [
+      ["Name", "ID", "Birth City"],
+      ["Bob", "434", "Chicago"],
+      ["Sue", "719", "Havana"],
+    ];
+    secondParagraph.insertTable(3, 3, "After", tableData);
+    await context.sync();
+  });
+}
+
+async function createContentControl() {
+  await Word.run(async (context) => {
+    // Queue commands to create a content control.
+    const serviceNameRange = context.document.getSelection();
+    const serviceNameContentControl = serviceNameRange.insertContentControl();
+    serviceNameContentControl.title = "Service Name";
+    serviceNameContentControl.tag = "serviceName";
+    serviceNameContentControl.appearance = "Tags";
+    serviceNameContentControl.color = "blue";
+    await context.sync();
+  });
+}
+
+async function replaceContentInControl() {
+  await Word.run(async (context) => {
+    const serviceNameContentControl = context.document.contentControls.getByTag("serviceName").getFirst();
+    serviceNameContentControl.insertText("Fabrikam Online Productivity Suite", "Replace");
+    await context.sync();
+  });
 }
 
 /*
