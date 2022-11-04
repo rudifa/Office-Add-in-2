@@ -17,12 +17,13 @@
  }
  
  .ms-welcome__header {
-    padding: 20px;
+    padding: 10px;
     display: -webkit-flex;
     display: flex;
     -webkit-flex-direction: column;
     flex-direction: column;
     align-items: center;
+    width: 100%;
  }
 
  .ms-welcome__main {

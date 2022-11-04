@@ -42,3 +42,10 @@ Not yet done at this stage.
 
 The procedure should be similar to the above procedure for the web.
 
+### References
+
+[Tutorial: Create a Word task pane add-in](https://learn.microsoft.com/en-us/office/dev/add-ins/tutorials/word-tutorial)
+
+[Word package js API reference](https://learn.microsoft.com/en-us/javascript/api/word?view=word-js-preview)
+
+[Office Add-In - Xomino](https://xomino.com/category/office-add-in/) - tables, ... 
