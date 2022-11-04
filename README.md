@@ -26,21 +26,24 @@ If in doubt:
 
 ### Testing with the netlify and the MS Word - web
 
-The add-in is deployed on [netlify](https://office-add-in-2-7d7ee5.netlify.app).
-
-Quick test in a browser: [click](https://office-add-in-2-7d7ee5.netlify.app/taskpane.html) to open the add-in's Welcome page.
+The add-in is deployed on [netlify](https://office-add-in-2-7d7ee5.netlify.app/taskpane.html).
 
 Test in the MS Word web app:
 
-- in Word, Insert -> Add-ins -> Upload my Add-in, navigate to a local copy of the [manifest-netlify](https://github.com/rudifa/Office-Add-in-2/blob/main/manifest-netlify.xml) and upload it
-- you may need one or two web page restarts until the add-in icon appears as the rightmost item in the Ribbon
-- try it.
+1. download a copy  of the file [manifest-netlify.xml](https://office-add-in-2-7d7ee5.netlify.app/assets/manifest-netlify.xml) from my github repo.
+2. open [MS Office](https://www.office.com/)
+3. log in or sign up
+4. open the Word app
+5. open a new document
+6. in `Insert -> Add-ins -> Upload my Add-in` navigate to the local copy of the `manifest-netlify.xml` and upload it
+7. a `Show Taskpane` icon will appear at the right of the Ribbon
+8. click the icon to open the Task Pane
+9. try it
+
 
 ### Testing with the netlify and the MS Word desktop
 
-Not yet done at this stage.
-
-The procedure should be similar to the above procedure for the web.
+Follow steps 4 - 9 above (not tested yet).
 
 ### References
 
