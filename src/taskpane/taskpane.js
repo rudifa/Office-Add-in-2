@@ -6,6 +6,10 @@
 /* global Office, Word */
 
 import { base64Image } from "../../base64Image";
+// import { GithubConnect } from "./github-connect";
+
+import * as ghc from "./github-connect";
+
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Word) {
@@ -112,21 +116,21 @@ async function findGithubUsersTable() {
 async function updateGithubUserData() {
   await Word.run(async (context) => {
     var tableFound = await _findGithubUsersTable(context);
-    console.log(`testAsync`, tableFound);
+    console.log(`updateGithubUserData`, tableFound);
     if (!tableFound) {
       await insertGithubUsersTable();
       tableFound = await _findGithubUsersTable(context);
     }
     context.load(tableFound);
     await context.sync();
-    console.log(`testAsync loaded tableFound`, tableFound);
+    console.log(`updateGithubUserData loaded tableFound`, tableFound);
 
     // await _logAllCellValues(context, tableFound);
 
     const userData = await _fetchUserData();
     const userName = userData[0];
     const rowFound = await _findMatchingRow(context, tableFound, userName);
-    console.log(`testAsync rowFound`, rowFound);
+    console.log(`updateGithubUserData rowFound`, rowFound);
 
     if (!rowFound) {
       await _addRow(context, tableFound, userData);
@@ -204,17 +208,9 @@ function clearAddinInfo() {
  */
 
 async function testAsync() {
-  await Word.run(async (context) => {
-    var tableFound = await _findGithubUsersTable(context);
-    console.log(`testAsync`, tableFound);
-    if (!tableFound) {
-      await insertGithubUsersTable();
-      tableFound = await _findGithubUsersTable(context);
-    }
-    context.load(tableFound);
-    await context.sync();
-    console.log(`testAsync loaded`, tableFound);
-  });
+  const userData = await ghc.fetchUserData(getUserName());
+  console.log(`testAsync`, userData);
+  displayInfoMessage(`testAsync ${userData}`);
 }
 
 async function _logAllCellValues(context, tableFound) {
