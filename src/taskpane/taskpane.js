@@ -21,8 +21,10 @@ Office.onReady((info) => {
 
     document.getElementById("insert-github-users-table").onclick = () => tryCatch(findOrInsertGithubUsersTable);
     document.getElementById("update-github-user-data").onclick = () => tryCatch(updateGithubUserData);
-
     document.getElementById("test-async").onclick = () => tryCatch(testAsync);
+
+    document.getElementById("display-addin-info").onclick = () => tryCatch(displayAddinInfo);
+    document.getElementById("p-message").onclick = () => tryCatch(clearAddinInfo);
 
     document.getElementById("insert-paragraph").onclick = () => tryCatch(insertParagraph);
     document.getElementById("apply-style").onclick = () => tryCatch(applyStyle);
@@ -59,7 +61,7 @@ async function _fetchUserData() {
   const userName = getUserName();
   // fetch the user's data from the GitHub API.
   const url = `https://api.github.com/users/${userName}`;
-  const obj = await fetchFrom(url);
+  const obj = await fetchFrom(url, `github user ${userName} not found`);
   // prepare the data for the table.
   const userData = ["login", "name", "location", "bio"].map((key) => obj[key] || "");
   console.log(`updateGithubUserData`, userData);
@@ -79,6 +81,8 @@ async function findOrInsertGithubUsersTable() {
     console.log(`findOrInsertGithubUsersTable`, tableFound);
     if (!tableFound) {
       await insertGithubUsersTable();
+    } else {
+      displayInfoMessage("Table already exists");
     }
   });
 }
@@ -185,6 +189,16 @@ async function _findGithubUsersTable(context) {
   return tableFound;
 }
 
+function displayAddinInfo() {
+  const message = `
+  This sample Word add-in shows how to insert a table into a document, and to update the table with data fetched from the GitHub API.`;
+  displayInfoMessage(message);
+}
+
+function clearAddinInfo() {
+  displayInfoMessage("");
+}
+
 /**
  * Leftovers from earlier code versions
  */
@@ -258,11 +272,11 @@ function displayMessage(message, color) {
  * @param {*} url
  * @returns promise that resolves to the JSON object returned by the url
  */
-async function fetchFrom(url) {
+async function fetchFrom(url, errorMessage) {
   const response = await fetch(url);
   if (!response.ok) {
     //console.log(response);
-    throw new Error(`status: ${response.status}`);
+    throw new Error(`${errorMessage}`);
   }
   const data = await response.json();
   return data;

@@ -22,7 +22,7 @@
     <link rel="stylesheet" type="text/css" href="taskpane.css" fetchpriority="high" rel="noopener noreferrer" />
       -->
     <style>
-/* 
+      /* 
  * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
  */
@@ -101,6 +101,29 @@
       b {
         font-weight: bold;
       }
+
+      input {
+        padding: 0px 5px;
+      }
+
+      .sticky {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+      }
+
+      fieldset {
+        margin: 8px;
+        border: 1px solid silver;
+        padding: 8px;
+        border-radius: 4px;
+        width: 100%;
+        text-align: center;
+      }
+
+      legend {
+        padding: 2px;
+      }
     </style>
   </head>
 
@@ -109,30 +132,33 @@
       <h2 class="ms-font-xl">Please sideload your add-in to see app body.</h2>
     </section>
     <main id="app-body" class="ms-welcome__main" style="display: none">
-      <section class="ms-welcome__header ms-bgColor-neutralLighter">
+      <section class="ms-welcome__header ms-bgColor-neutralLighter sticky">
         <p id="p-message"></p>
       </section>
       <br />
-      <button class="ms-Button" id="insert-github-users-table">Insert github users table</button><br />
-      <button class="ms-Button" id="update-github-user-data">Update github user data</button><br />
-
-      <!-- add  input element to get the user name -->
-      <input type="text" id="github-user-name" placeholder="Enter github user name" />
-
-      <hr />
-      <button class="ms-Button" id="test-async">Test async</button><br />
-      <button class="ms-Button" id="insert-paragraph">Insert Paragraph</button><br />
-      <button class="ms-Button" id="apply-style">Apply Style</button><br />
-      <button class="ms-Button" id="apply-custom-style">Apply Custom Style</button><br />
-      <button class="ms-Button" id="change-font">Change Font</button><br />
-      <button class="ms-Button" id="insert-text-into-range">Insert Abbreviation</button><br />
-      <button class="ms-Button" id="insert-text-outside-range">Add Version Info</button><br />
-      <button class="ms-Button" id="replace-text">Change Quantity Term</button><br />
-      <button class="ms-Button" id="insert-image">Insert Image</button><br />
-      <button class="ms-Button" id="insert-html">Insert HTML</button><br />
-      <button class="ms-Button" id="insert-table">Insert Table</button><br />
-      <button class="ms-Button" id="create-content-control">Create Content Control</button><br />
-      <button class="ms-Button" id="replace-content-in-control">Rename Service</button><br />
+      <fieldset>
+        <legend>Github users</legend>
+        <button class="ms-Button" id="insert-github-users-table">Insert github users table</button><br /><br />
+        <input type="text" id="github-user-name" placeholder="github user name" /> 
+        <button class="ms-Button" id="update-github-user-data">Update github user data</button><br /><br />
+        <button class="ms-Button" id="display-addin-info">info</button><br />
+      </fieldset>
+      <fieldset>
+        <legend>development</legend>
+        <button class="ms-Button" id="test-async">Test async</button><br />
+        <button class="ms-Button" id="insert-paragraph">Insert Paragraph</button><br />
+        <button class="ms-Button" id="apply-style">Apply Style</button><br />
+        <button class="ms-Button" id="apply-custom-style">Apply Custom Style</button><br />
+        <button class="ms-Button" id="change-font">Change Font</button><br />
+        <button class="ms-Button" id="insert-text-into-range">Insert Abbreviation</button><br />
+        <button class="ms-Button" id="insert-text-outside-range">Add Version Info</button><br />
+        <button class="ms-Button" id="replace-text">Change Quantity Term</button><br />
+        <button class="ms-Button" id="insert-image">Insert Image</button><br />
+        <button class="ms-Button" id="insert-html">Insert HTML</button><br />
+        <button class="ms-Button" id="insert-table">Insert Table</button><br />
+        <button class="ms-Button" id="create-content-control">Create Content Control</button><br />
+        <button class="ms-Button" id="replace-content-in-control">Rename Service</button><br />
+      </fieldset>
     </main>
   </body>
 </html>
