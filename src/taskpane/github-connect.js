@@ -1,12 +1,13 @@
 const githubUsersUrl = "https://api.github.com/users/";
-export const userDataKeys = ["login", "name", "location", "bio"];
+export const userDataKeys = ["login", "name", "location", "bio", "public_repos"];
 
 export async function fetchUserData(userName) {
   // fetch the user's data from the GitHub API.
   const url = `${githubUsersUrl}${userName}`;
   const obj = await fetchFrom(url, `github user ${userName} not found`);
+  console.log(`fetched user data for ${userName}`, obj);
   // prepare the data for the table.
-  const userData = userDataKeys.map((key) => obj[key] || "");
+  const userData = userDataKeys.map((key) => String(obj[key]) || "");
   console.log(`fetchUserData`, userData);
   return userData;
 }
