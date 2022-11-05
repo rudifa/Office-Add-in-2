@@ -196,9 +196,19 @@ async function tryCatch(callback) {
  */
 
 async function testAsync() {
+  await Word.run(async (context) => {
+    const table = await _findGithubUsersTable(context);
+    console.log(`testAsync table`, table);
+    console.log(`testAsync table.values`, table.values);
+    console.log(`testAsync table.values[0]`, table.values[0]);
+    console.log(`testAsync table.values[0][0]`, table.values[0][0]);
+  });
+}
+
+async function testAsync_1() {
   const userData = await GHConnect.fetchUserData(getUserName());
   console.log(`testAsync`, userData);
-  displayInfoMessage(`testAsync ${userData}`);
+  displayInfoMessage(`testAsync userData: ${userData}`);
 }
 
 /**
