@@ -5,6 +5,8 @@
 
 /* global Office, Word */
 
+require("!style-loader!css-loader!./taskpane.css");
+
 import { base64Image } from "../../base64Image";
 
 import * as GHConnect from "./github-connect";
