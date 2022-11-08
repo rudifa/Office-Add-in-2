@@ -41,9 +41,13 @@ Test in the MS Word web app:
 9. try it
 
 
-### Testing with the netlify and the MS Word desktop
+### Testing with the netlify and the MS Word desktop on Mac
 
-Follow steps 4 - 9 above (not tested yet).
+Follow the [instructions](https://learn.microsoft.com/en-us/office/dev/add-ins/testing/sideload-an-office-add-in-on-mac), briefly:
+
+1. download the file [manifest-netlify.xml](https://office-add-in-2-7d7ee5.netlify.app/assets/manifest-netlify) and copy it into the designated [directory](/Users/<username>/Library/Containers/com.microsoft.Word/Data/Documents/wef)
+2. in the desktop Word app, go to the Insert - Add-ins and install the add-in
+3. try it
 
 ### References
 
